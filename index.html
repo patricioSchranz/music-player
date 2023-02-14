@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+</head>
+<body>
+
+    <div class="big-container">
+        <h1>Music Player</h1>
+ 
+<!-- MUSIC PLAYER-->
+        <section class="music-player">
+
+            <!-- MUSIC PLAYER HEADER-->
+            <header class="music-player_header">
+                <h2 class="music-player_header_song-title">Song Title</h2>
+                <h3 class="music-player_header_componist">Composer</h3>
+            </header>
+
+            <!-- AUDIO -->
+            <audio src="audio/music_jacinto-1.mp3"></audio>
+
+            <!-- PROGRESS -->
+            <div class="music-player_progress_container">
+                <!-- PROGRESS BAR-->
+                <div class="music-player_progress_progress-bar"></div>
+
+                <!-- DURATION -->
+                <div class="music-player_progress_duration-wrapper">
+                    <span class="music-player_progress_current-time">0:00</span>
+                    <span class="music-player_progress_duration">2:06</span> 
+                </div>
+            </div>
+
+            <!-- CONTROLS -->
+            <div class="music-player_controls-container">
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play main-button" id="play" title="Play"></i>
+                <i class="fas fa-forward" id="next" title="Next"></i>
+            </div>
+        </section>
+
+    </div>
+    
+</body>
+</html>

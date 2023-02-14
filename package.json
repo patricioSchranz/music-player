@@ -1,0 +1,12 @@
+{
+  "name": "music-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "built:music-player": "sass ./style/music-player.scss ./style/music-player.css --style=compressed --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
