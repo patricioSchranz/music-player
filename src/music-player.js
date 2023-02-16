@@ -3,9 +3,15 @@
 
 const
     audioPlayer = document.querySelector('audio'),
-    playButton = document.querySelector('#play',)
+    playButton = document.querySelector('#play'),
+    nextButton = document.querySelector('#next'),
+    previousButton = document.querySelector('#prev'),
     volumeRange = document.querySelector('.range-wrapper'),
     volumeThumb = document.querySelector('.volume .thumb'),
+    volumeIcon = document.querySelector('.volume i'),
+    songNameDisplay = document.querySelector('.music-player_header_song-title'),
+    componistDisplay = document.querySelector('.music-player_header_componist'),
+    imageDisplay = document.querySelector('.music-player_header_img'),
     currentAudioTimeDisplay = document.querySelector('.music-player_progress_current-time'),
     audioDurationDisplay = document.querySelector('.music-player_progress_duration'),
     progressBar = document.querySelector('.music-player_progress_progress-bar'),
@@ -17,12 +23,15 @@ const
 
 let 
     isMousePressed = false,
-    isPlaying = false
+    isPlaying = false,
+    currentSongIndex = 0,
+    isMuted = false,
+    volumeSnapshot = undefined
 
 
 const songs = [
     {
-        songURL: 'audio/music_jacinto-1.mp3',
+        songURL: './audio/music_jacinto-1.mp3',
         artist: 'Jacinto Design',
         displayName : 'Electric Chill Machine',
         imageURL : 'img/eagle.jpg'
@@ -43,7 +52,7 @@ const songs = [
         songURL: 'audio/metric-1.mp3',
         artist: 'Metric/Jacinto Design',
         displayName : 'Front Row (Remix)',
-        imageURL : 'img/tiger.jpg'
+        imageURL : 'img/hands.jpg'
     }
 ]
 
@@ -86,18 +95,45 @@ const getRightTimeFormat = (seconds)=>{
         minutes = Math.floor(minutes)
         restSeconds = addLeadingZero(Math.floor(restSeconds))
 
-        console.log('minutes and seconds', minutes + ':' + restSeconds)
+        // console.log('minutes and seconds', minutes + ':' + restSeconds)
         return {minutes : minutes, seconds : restSeconds}
     }
     else if(seconds < 60){
         seconds = Math.floor(seconds)
         seconds = addLeadingZero(seconds)
 
-        console.log('SECONDS', seconds)
+        // console.log('SECONDS', seconds)
 
         return seconds
     }
 
+}
+
+const setTrack = (index)=>{
+    const 
+        {songURL, artist, displayName, imageURL} = songs[index]
+
+    audioPlayer.src = songURL
+    songNameDisplay.textContent = displayName
+    componistDisplay.textContent = artist
+    imageDisplay.src = imageURL
+}
+
+const setVolume = ()=>{
+    const selectedVolume = parseInt(volumeThumb.style.width.replace('%', '')) / 100
+
+    // console.log(selectedVolume)
+
+    audioPlayer.volume = selectedVolume
+
+    if(selectedVolume === 0){
+        isMuted = true
+        volumeIcon.classList.replace('fa-volume-high', 'fa-volume-xmark')
+    }
+    else{
+        isMuted = false
+        volumeIcon.classList.replace('fa-volume-xmark', 'fa-volume-high')
+    }
 }
 
 
@@ -110,6 +146,32 @@ const getRightTimeFormat = (seconds)=>{
 //
 
 window.addEventListener('load', ()=>{
+    // audioPlayer.src = songs[currentSongIndex].songURL
+
+    setTrack(currentSongIndex)
+
+    // console.log('audio player volume',audioPlayer.volume)
+    // console.log('volume bar style', volumeThumb.style.width)
+
+    // const 
+    //     stylesOfVolumeThumb = getComputedStyle(volumeThumb),
+    //     widthOfVolumeThumb = stylesOfVolumeThumb.getPropertyValue('width')
+
+    // console.log('styles of volume thumb', stylesOfVolumeThumb)
+    // console.log('css width of volume thumb', widthOfVolumeThumb)
+
+    volumeThumb.style.width = '70%'
+    
+    setVolume()
+})
+
+
+//
+// AUDIO LOADED
+//
+
+audioPlayer.addEventListener('canplay', ()=>{
+    console.log(audioPlayer.src)
     console.log(audioPlayer.duration)
 
     let {duration} = audioPlayer
@@ -118,7 +180,7 @@ window.addEventListener('load', ()=>{
 
     if(typeof duration === 'object'){ audioDurationDisplay.textContent = `${duration.minutes}:${duration.seconds}` }
     if(typeof duration !== 'object'){ audioDurationDisplay.textContent = `00:${duration}` }
-
+    
 })
 
 
@@ -160,7 +222,7 @@ audioPlayer.addEventListener('timeupdate', (event)=>{
 
     progressBar.style.width = `${progressPercent}%`
 
-    console.log(typeof currentTime)
+    // console.log(typeof currentTime)
 
     if(typeof currentTime ===  'object') { currentAudioTimeDisplay.textContent = `${currentTime.minutes}:${currentTime.seconds}` }
     if(typeof currentTime !==  'object') { currentAudioTimeDisplay.textContent = `0:${currentTime}` }
@@ -176,6 +238,7 @@ volumeRange.addEventListener('mousedown', (event)=>{
 
     isMousePressed = true
     changeBarState(volumeRange, event, volumeThumb)
+    setVolume()
 
     // console.log('mousedown')
     // console.log('isMousePressed', isMousePressed)
@@ -193,11 +256,35 @@ volumeRange.addEventListener('mouseleave', ()=>{
 })
 
 volumeRange.addEventListener('mousemove', (event)=>{
-
-    isMousePressed && changeBarState(volumeRange, event, volumeThumb)
+    if(isMousePressed) {
+        changeBarState(volumeRange, event, volumeThumb)
+        setVolume()
+    } 
 })
 
 
+//
+// VOLUME ICON
+//
+
+volumeIcon.addEventListener('click', ()=>{
+    isMuted = !isMuted
+
+    // console.log('snapshot', volumeSnapshot)
+
+    if(isMuted){
+        volumeSnapshot = volumeThumb.style.width
+        volumeIcon.classList.replace('fa-volume-high', 'fa-volume-xmark')
+        volumeThumb.style.width = '0%'
+        setVolume()
+    }
+    else{
+        volumeIcon.classList.replace('fa-volume-xmark', 'fa-volume-high')
+        volumeThumb.style.width = volumeSnapshot ?? '70%'
+        setVolume()
+    }
+     
+})
 
 //
 // PROGRESS BAR
@@ -229,11 +316,45 @@ progressContainer.addEventListener('mouseleave', ()=>{
     isMousePressed = false
 })
 
+
 // progressContainer.addEventListener('mousemove', (event)=>{
 
 //     isMousePressed && changeBarState(progressContainer, event, progressBar)
 
 // })
+
+
+//
+// CHANGE TRACK
+//
+
+nextButton.addEventListener('click', ()=>{
+    
+
+    if(currentSongIndex < songs.length -1){
+        currentSongIndex++
+    }
+    else{
+        currentSongIndex = 0
+    }
+
+    setTrack(currentSongIndex)
+    if(isPlaying) {audioPlayer.play()}
+})
+
+previousButton.addEventListener('click', ()=>{
+    console.log(currentSongIndex)
+
+    if(currentSongIndex >= 1){
+        currentSongIndex--
+    }
+    else{
+        currentSongIndex = songs.length -1
+    }
+
+    setTrack(currentSongIndex)
+    if(isPlaying) {audioPlayer.play()}
+})
 
 
 
