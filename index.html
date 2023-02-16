@@ -6,7 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
 
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <link rel="icon" type="image/png" href="./favicon-32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./favicon-48.png" sizes="48x48">
+    <link rel="icon" type="image/png" href="./favicon-144.png" sizes="144x144">
+    <link rel="apple-touch-icon" type="image/png" href="./favicon-180.png" sizes="180x180">
+
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+     <link rel="stylesheet" href="style/music-player.css">
 </head>
 <body>
 
@@ -18,8 +25,9 @@
 
             <!-- MUSIC PLAYER HEADER-->
             <header class="music-player_header">
-                <h2 class="music-player_header_song-title">Song Title</h2>
-                <h3 class="music-player_header_componist">Composer</h3>
+                <img src="./img/eagle.jpg" alt="eagle" class="music-player_header_img">
+                <h2 class="music-player_header_song-title">Electric Chill Machine</h2>
+                <h3 class="music-player_header_componist">Jacinto Design</h3>
             </header>
 
             <!-- AUDIO -->
@@ -27,25 +35,38 @@
 
             <!-- PROGRESS -->
             <div class="music-player_progress_container">
-                <!-- PROGRESS BAR-->
-                <div class="music-player_progress_progress-bar"></div>
-
+             
                 <!-- DURATION -->
                 <div class="music-player_progress_duration-wrapper">
                     <span class="music-player_progress_current-time">0:00</span>
                     <span class="music-player_progress_duration">2:06</span> 
                 </div>
+
+                <!-- PROGRESS BAR-->
+                <div class="music-player_progress_progress-bar"></div>
             </div>
 
             <!-- CONTROLS -->
             <div class="music-player_controls-container">
-                <i class="fas fa-backward" id="prev" title="Previous"></i>
-                <i class="fas fa-play main-button" id="play" title="Play"></i>
-                <i class="fas fa-forward" id="next" title="Next"></i>
+                <div class="action-controls">
+                    <i class="fas fa-backward" id="prev" title="Previous"></i>
+                    <i class="fas fa-play main-button" id="play" title="Play"></i>
+                    <i class="fas fa-forward" id="next" title="Next"></i>
+                </div>
+               
+                <div class="volume">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <div class="range-wrapper">
+                        <div class="thumb"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
             </div>
+
         </section>
 
-    </div>
+    </div><!-- end big container -->
     
+    <script src="src/music-player.js"></script>
 </body>
 </html>
