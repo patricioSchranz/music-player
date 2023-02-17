@@ -263,6 +263,7 @@ volumeRange.addEventListener('mousemove', (event)=>{
 })
 
 
+
 //
 // VOLUME ICON
 //
@@ -279,9 +280,11 @@ volumeIcon.addEventListener('click', ()=>{
         setVolume()
     }
     else{
+        // console.log('volume thumb style', volumeThumb.style.width)
         volumeIcon.classList.replace('fa-volume-xmark', 'fa-volume-high')
         volumeThumb.style.width = volumeSnapshot ?? '70%'
         setVolume()
+        // console.log('volume thumb style', volumeThumb.style.width)
     }
      
 })
