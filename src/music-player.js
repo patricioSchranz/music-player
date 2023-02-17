@@ -64,19 +64,11 @@ const songs = [
 const changeBarState = (bar, event, thumb)=>{
     // => this is needed for a issue when the event.target on the beginning and the end of the event is different
     event.preventDefault();
-    
-    // event.stopPropagation();
 
     const 
         widthOfBar = bar.clientWidth,
         {offsetX : currentOffset } = event,
         percentOfOffset = Math.ceil((currentOffset * 100) / widthOfBar)
-
-    // console.log('event target', event.target)
-    // console.log(' range offsetX =>', currentOffset)
-    // console.log('width of element', widthOfBar)
-    // console.log('percent of offset', percentOfOffset)
-    // console.log('event', event)
 
     thumb.style.width = `${percentOfOffset}%`
 }
@@ -95,14 +87,11 @@ const getRightTimeFormat = (seconds)=>{
         minutes = Math.floor(minutes)
         restSeconds = addLeadingZero(Math.floor(restSeconds))
 
-        // console.log('minutes and seconds', minutes + ':' + restSeconds)
         return {minutes : minutes, seconds : restSeconds}
     }
     else if(seconds < 60){
         seconds = Math.floor(seconds)
         seconds = addLeadingZero(seconds)
-
-        // console.log('SECONDS', seconds)
 
         return seconds
     }
@@ -121,8 +110,6 @@ const setTrack = (index)=>{
 
 const setVolume = ()=>{
     const selectedVolume = parseInt(volumeThumb.style.width.replace('%', '')) / 100
-
-    // console.log(selectedVolume)
 
     audioPlayer.volume = selectedVolume
 
@@ -146,19 +133,8 @@ const setVolume = ()=>{
 //
 
 window.addEventListener('load', ()=>{
-    // audioPlayer.src = songs[currentSongIndex].songURL
 
     setTrack(currentSongIndex)
-
-    // console.log('audio player volume',audioPlayer.volume)
-    // console.log('volume bar style', volumeThumb.style.width)
-
-    // const 
-    //     stylesOfVolumeThumb = getComputedStyle(volumeThumb),
-    //     widthOfVolumeThumb = stylesOfVolumeThumb.getPropertyValue('width')
-
-    // console.log('styles of volume thumb', stylesOfVolumeThumb)
-    // console.log('css width of volume thumb', widthOfVolumeThumb)
 
     volumeThumb.style.width = '70%'
     
@@ -171,9 +147,6 @@ window.addEventListener('load', ()=>{
 //
 
 audioPlayer.addEventListener('canplay', ()=>{
-    console.log(audioPlayer.src)
-    console.log(audioPlayer.duration)
-
     let {duration} = audioPlayer
 
     duration = getRightTimeFormat(duration)
@@ -208,21 +181,13 @@ playButton.addEventListener('click', ()=>{
 })
 
 audioPlayer.addEventListener('timeupdate', (event)=>{
-    // console.log(event)
-
     let
         {duration, currentTime} = event.target,
         progressPercent = (currentTime * 100) / duration
 
     currentTime = getRightTimeFormat(currentTime)
 
-    // console.log('the current time', currentTime)
-    // console.log('the duration of the current track', duration)
-    // console.log('the progress in percent', progressPercent)
-
     progressBar.style.width = `${progressPercent}%`
-
-    // console.log(typeof currentTime)
 
     if(typeof currentTime ===  'object') { currentAudioTimeDisplay.textContent = `${currentTime.minutes}:${currentTime.seconds}` }
     if(typeof currentTime !==  'object') { currentAudioTimeDisplay.textContent = `0:${currentTime}` }
@@ -240,15 +205,10 @@ volumeRange.addEventListener('mousedown', (event)=>{
     changeBarState(volumeRange, event, volumeThumb)
     setVolume()
 
-    // console.log('mousedown')
-    // console.log('isMousePressed', isMousePressed)
 })
 
 volumeRange.addEventListener('mouseup', ()=>{
     isMousePressed = false
-
-    // console.log('mousup')
-    // console.log('isMousePressed', isMousePressed)
 })
 
 volumeRange.addEventListener('mouseleave', ()=>{
@@ -280,11 +240,9 @@ volumeIcon.addEventListener('click', ()=>{
         setVolume()
     }
     else{
-        // console.log('volume thumb style', volumeThumb.style.width)
         volumeIcon.classList.replace('fa-volume-xmark', 'fa-volume-high')
         volumeThumb.style.width = volumeSnapshot ?? '70%'
         setVolume()
-        // console.log('volume thumb style', volumeThumb.style.width)
     }
      
 })
@@ -303,28 +261,15 @@ progressContainer.addEventListener('mousedown', (event)=>{
         clickedAudioTime = (currentAudioPlayPercent / 100) * audioPlayer.duration
     
     audioPlayer.currentTime = clickedAudioTime
-
-    // console.log('mousedown')
-    // console.log('isMousePressed', isMousePressed)
 })
 
 progressContainer.addEventListener('mouseup', ()=>{
     isMousePressed = false
-
-    // console.log('mousup')
-    // console.log('isMousePressed', isMousePressed)
 })
 
 progressContainer.addEventListener('mouseleave', ()=>{
     isMousePressed = false
 })
-
-
-// progressContainer.addEventListener('mousemove', (event)=>{
-
-//     isMousePressed && changeBarState(progressContainer, event, progressBar)
-
-// })
 
 
 //
@@ -346,7 +291,6 @@ nextButton.addEventListener('click', ()=>{
 })
 
 previousButton.addEventListener('click', ()=>{
-    console.log(currentSongIndex)
 
     if(currentSongIndex >= 1){
         currentSongIndex--
